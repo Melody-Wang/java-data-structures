@@ -6,7 +6,7 @@ import java.util.NoSuchElementException;
 public class BinaryHeap <T extends Comparable<? super T>> {
 
     private static final int DEFAULT_CAPACITY = 5; // default initial capacity
-    private static final int EXPAND_FACTOR    = 2; // resizing factor
+    private static final int EXPAND_FACTOR = 2; // resizing factor
     private static final int INDEXHELPER = 2;
 
     private T[] heap;          // heap array
@@ -22,6 +22,7 @@ public class BinaryHeap <T extends Comparable<? super T>> {
         this.nelems = 0;
         this.isMaxHeap = true;
     }
+
     /**
      * Initializes a binary max heap with a given initial capacity.
      *
@@ -36,10 +37,11 @@ public class BinaryHeap <T extends Comparable<? super T>> {
 
     /**
      * Initializes a binary heap with a given initial capacity.
-     * @param heapSize The initial capacity of the heap.
+     *
+     * @param heapSize  The initial capacity of the heap.
      * @param isMaxHeap indicates whether the heap should be max or min
      */
-    @SuppressWarnings( "unchecked" )
+    @SuppressWarnings("unchecked")
     public BinaryHeap(int heapSize, boolean isMaxHeap) {
         this.heap = (T[]) new Comparable[heapSize];
         this.nelems = 0;
@@ -70,10 +72,11 @@ public class BinaryHeap <T extends Comparable<? super T>> {
     /**
      * Adds the specified element to the heap; data cannot be null.
      * Resizes the storage if full.
+     *
      * @param data The element to add.
      * @throws NullPointerException if o is null.
      */
-    public void add( T data ) throws NullPointerException {
+    public void add(T data) throws NullPointerException {
         if (data == null) {
             throw new NullPointerException();
         }
@@ -90,6 +93,7 @@ public class BinaryHeap <T extends Comparable<? super T>> {
     /**
      * Removes and returns the element at the root. If the
      * heap is empty, then this method throws a NoSuchElementException.
+     *
      * @return The element at the root stored in the heap.
      * @throws java.util.NoSuchElementException if the heap is empty
      */
@@ -107,6 +111,7 @@ public class BinaryHeap <T extends Comparable<? super T>> {
 
     /**
      * Retrieves, but does not remove, the element at the root.
+     *
      * @return item at the root of the heap
      * @throws NoSuchElementException - if this heap is empty
      */
@@ -120,6 +125,7 @@ public class BinaryHeap <T extends Comparable<? super T>> {
     /**
      * Bubble up the element until the ordering property of the heap
      * is satisfied
+     *
      * @param index the index of the element to be trickled down
      */
     private void bubbleUp(int index) {
@@ -140,47 +146,23 @@ public class BinaryHeap <T extends Comparable<? super T>> {
     /**
      * Trickle down the element until the ordering property of the heap
      * is satisfied
+     *
      * @param index the index of the element to be trickled down
      */
     private void trickleDown(int index) {
         int leftChild = leftChild(index);
         int rightChild = rightChild(index);
-        /*
-        if (leftChild < nelems && heap[index].compareTo(heap[leftChild]) < 0
-        || rightChild < nelems && heap[index].compareTo(heap[rightChild]) < 0) {
-            int toSwap;
-            if (heap[index].compareTo(heap[leftChild]) < 0
-            && heap[index].compareTo(heap[rightChild]) < 0) {
-                if (heap[leftChild].compareTo(heap[rightChild]) < 0) {
-                    toSwap = rightChild;
-                } else {
-                    toSwap = leftChild;
-                }
-            } else if (heap[index].compareTo(heap[leftChild]) < 0) {
-                toSwap = leftChild;
-            } else {
+
+        if (leftChild < nelems) {
+            int toSwap = leftChild;
+            if (rightChild < nelems && trickleDownSwapper(leftChild, rightChild)) {
                 toSwap = rightChild;
+                swap(index, toSwap);
             }
-            swap(index, toSwap);
-            trickleDown(toSwap);
-        }
-         */
-        if (leftChild < nelems && trickleDownSwapper(index, leftChild)
-                || rightChild < nelems && trickleDownSwapper(index, rightChild)) {
-            int toSwap;
-            if (trickleDownSwapper(index, leftChild)
-                    && trickleDownSwapper(index, rightChild)) {
-                if (trickleDownSwapper(index, leftChild)) {
-                    toSwap = rightChild;
-                } else {
-                    toSwap = leftChild;
-                }
-            } else if (trickleDownSwapper(index, leftChild)) {
+            if (trickleDownSwapper(index, leftChild)) {
                 toSwap = leftChild;
-            } else {
-                toSwap = rightChild;
+                swap(index, toSwap);
             }
-            swap(index, toSwap);
             trickleDown(toSwap);
         }
     }
@@ -229,17 +211,6 @@ public class BinaryHeap <T extends Comparable<? super T>> {
         T tmp = heap[idx1];
         heap[idx1] = heap[idx2];
         heap[idx2] = tmp;
-    }
-
-    public static void main(String[] args) {
-        BinaryHeap<Integer> a = new BinaryHeap<>(5, false);
-        a.add(50);
-        a.add(30);
-        a.add(20);
-        a.add(15);
-        a.add(17);
-        a.add(85);
-        System.out.print(a.remove());
     }
 
 }
