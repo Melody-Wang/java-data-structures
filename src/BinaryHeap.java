@@ -1,6 +1,11 @@
+/**
+ * Name: Jiayun Wang
+ * PID: A155538515
+ */
+
 import java.util.NoSuchElementException;
 /**
- * TODO
+ * This class builds array based binary max-heap and min-heap
  * @param <T> Generics
  */
 public class BinaryHeap <T extends Comparable<? super T>> {
@@ -129,16 +134,15 @@ public class BinaryHeap <T extends Comparable<? super T>> {
      * @param index the index of the element to be trickled down
      */
     private void bubbleUp(int index) {
-        int parent = parent(index);
         if (isMaxHeap) {
-            if (parent >= 0 && heap[index].compareTo(heap[parent]) > 0) {
-                swap(index, parent);
-                bubbleUp(parent);
+            while (parent(index) >= 0 && heap[index].compareTo(heap[parent(index)]) > 0) {
+                swap(index, parent(index));
+                index = parent(index);
             }
         } else {
-            if (parent >= 0 && heap[index].compareTo(heap[parent]) < 0) {
-                swap(index, parent);
-                bubbleUp(parent);
+            while (parent(index) >= 0 && heap[index].compareTo(heap[parent(index)]) < 0) {
+                swap(index, parent(index));
+                index = parent(index);
             }
         }
     }
@@ -196,6 +200,9 @@ public class BinaryHeap <T extends Comparable<? super T>> {
     }
 
     private int parent(int index) {
+        if (index == 0) {
+            return -1;
+        }
         return (int) ((index - 1) / INDEXHELPER);
     }
 
