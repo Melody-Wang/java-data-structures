@@ -40,7 +40,9 @@ public class Compress {
         tree.buildTree(freq);
 
         // write number of bytes to out file
-        out.writeInt(byteCount);
+        if (byteCount > 0) {
+            out.writeInt(byteCount);
+        }
 
         /*
         // write a bit to indicate whether the file contains multiple type of characters

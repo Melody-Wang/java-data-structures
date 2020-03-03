@@ -23,7 +23,12 @@ public class Decompress {
         DataOutputStream out = new DataOutputStream(outFile);
 
         // read the number of byte from the file
-        int byteCount = in.readInt();
+        int byteCount;
+        try {
+            byteCount = in.readInt();
+        } catch(EOFException e) {
+            byteCount = 0;
+        }
 
         // decode and build the tree from the "header"
         HCTree tree = new HCTree();

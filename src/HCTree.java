@@ -187,9 +187,6 @@ public class HCTree {
      * @param freq an array recording the frequency of each symbol at the index of its ascii value
      */
     public void buildTree(int[] freq) {
-        if (freq.length == 0) {
-            return;
-        }
         int sum = 0;
         // create leaf nodes and put into array leaves
         for (int i = 0; i < NUM_CHARS; i++) {
@@ -198,6 +195,10 @@ public class HCTree {
                 // get the sum of the frequencies
                 sum += freq[i];
             }
+        }
+
+        if (sum == 0) {
+            return;
         }
 
         // add tree nodes to the priority queue
@@ -295,6 +296,9 @@ public class HCTree {
      * @throws IOException
      */
     public void encodeHCTree(HCNode node, BitOutputStream out) throws IOException {
+        if (node == null) {
+            return;
+        }
         if (node.isLeaf()) {
             out.writeBit(1);
             out.writeByte(node.getSymbol());
@@ -313,20 +317,24 @@ public class HCTree {
      * @throws IOException
      */
     public HCNode decodeHCTree(BitInputStream in) throws IOException {
-        if (in.readBit() == 0) {
-            HCNode c0 = decodeHCTree(in);
-            HCNode c1 = decodeHCTree(in);
-            HCNode parent = new HCNode(c0.getSymbol(), 0);
-            parent.setC0(c0);
-            parent.setC1(c1);
-            c0.setParent(parent);
-            c1.setParent(parent);
-            return parent;
-        } else {
-            Byte symbol = in.readByte();
-            int ascii = symbol & 0xff;
-            leaves[ascii] = new HCNode(symbol, 0);
-            return leaves[ascii];
+        try {
+            if (in.readBit() == 0) {
+                HCNode c0 = decodeHCTree(in);
+                HCNode c1 = decodeHCTree(in);
+                HCNode parent = new HCNode(c0.getSymbol(), 0);
+                parent.setC0(c0);
+                parent.setC1(c1);
+                c0.setParent(parent);
+                c1.setParent(parent);
+                return parent;
+            } else {
+                Byte symbol = in.readByte();
+                int ascii = symbol & 0xff;
+                leaves[ascii] = new HCNode(symbol, 0);
+                return leaves[ascii];
+            }
+        } catch (EOFException e) {
+            return null;
         }
     }
 
