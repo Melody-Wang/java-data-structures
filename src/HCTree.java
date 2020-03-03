@@ -187,6 +187,9 @@ public class HCTree {
      * @param freq an array recording the frequency of each symbol at the index of its ascii value
      */
     public void buildTree(int[] freq) {
+        if (freq.length == 0) {
+            return;
+        }
         int sum = 0;
         // create leaf nodes and put into array leaves
         for (int i = 0; i < NUM_CHARS; i++) {
@@ -205,7 +208,13 @@ public class HCTree {
             }
         }
 
-        while (pq.size() != 0) {
+        // set the root to the only node if freq only contains one type of character
+        if (pq.size() == 1) {
+            root = pq.poll();
+            return;
+        }
+
+        while (true) {
             // pop two nodes each time
             HCNode c0 = pq.poll();
             HCNode c1 = pq.poll();
@@ -239,6 +248,9 @@ public class HCTree {
         HCNode target = leaves[ascii];
 
         HCNode curNode = target;
+        if (curNode == root) {
+            bits = "0" + bits;
+        }
         while (curNode != root) {
             // determine if the current node is c0 or c1 of its parent node
             if (curNode.getParent().getC0() == curNode) {
@@ -283,16 +295,14 @@ public class HCTree {
      * @throws IOException
      */
     public void encodeHCTree(HCNode node, BitOutputStream out) throws IOException {
-        if (node != null) {
-            if (node.isLeaf()) {
-                out.writeBit(1);
-                out.writeByte(node.getSymbol());
-            } else {
-                out.writeBit(0);
-            }
-            encodeHCTree(node.getC0(), out);
-            encodeHCTree(node.getC1(), out);
+        if (node.isLeaf()) {
+            out.writeBit(1);
+            out.writeByte(node.getSymbol());
+            return;
         }
+        out.writeBit(0);
+        encodeHCTree(node.getC0(), out);
+        encodeHCTree(node.getC1(), out);
     }
 
     /**
@@ -309,14 +319,15 @@ public class HCTree {
             HCNode parent = new HCNode(c0.getSymbol(), 0);
             parent.setC0(c0);
             parent.setC1(c1);
+            c0.setParent(parent);
+            c1.setParent(parent);
             return parent;
-        } else if (in.readBit() == 1) {
+        } else {
             Byte symbol = in.readByte();
             int ascii = symbol & 0xff;
-            leaves[ascii] = new HCNode(in.readByte(), 0);
+            leaves[ascii] = new HCNode(symbol, 0);
             return leaves[ascii];
         }
-        return null;
     }
 
 }
