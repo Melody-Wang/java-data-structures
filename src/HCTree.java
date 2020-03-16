@@ -227,7 +227,8 @@ public class HCTree {
             c1.setParent(parent);
             // add parent node back into the priority queue
             pq.offer(parent);
-            // terminate the process when the sum of the parent node is equal to the sum of all frequencies
+            /* terminate the process when the sum of the parent node
+            is equal to the sum of all frequencies */
             if (c0.getFreq() + c1.getFreq() == sum) {
                 root = parent;
                 break;

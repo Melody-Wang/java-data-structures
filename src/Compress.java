@@ -12,6 +12,13 @@ public class Compress {
     private static final int EXP_ARG = 2; // number of expected arguments
     private static final int NUM_CHARS = 256;
 
+    /**
+     * The main method compresses the file and writes the encoded information to the
+     * output stream.
+     *
+     * @param args command line arguments to provide the source of the files
+     * @throws IOException
+     */
     public static void main(String[] args) throws IOException {
 
         // Check if the number of arguments is correct
@@ -65,4 +72,5 @@ public class Compress {
         out.close();
         file.close();
     }
+
 }

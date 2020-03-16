@@ -6,6 +6,13 @@ import java.io.*;
 public class Decompress {
     private static final int EXP_ARG = 2; // number of expected arguments
 
+    /**
+     * The main method decompresses the compressed file and writes the recovered
+     * information to the output stream
+     *
+     * @param args command line arguments to provide the source of the files
+     * @throws IOException
+     */
     public static void main(String[] args) throws IOException {
 
         // Check if the number of arguments is correct
@@ -26,7 +33,7 @@ public class Decompress {
         int byteCount;
         try {
             byteCount = in.readInt();
-        } catch(EOFException e) {
+        } catch (EOFException e) {
             byteCount = 0;
         }
 
@@ -48,4 +55,5 @@ public class Decompress {
         out.close();
         return;
     }
+
 }

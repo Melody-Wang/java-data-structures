@@ -161,10 +161,8 @@ public class BinaryHeap <T extends Comparable<? super T>> {
             int toSwap = leftChild;
             if (rightChild < nelems && trickleDownSwapper(leftChild, rightChild)) {
                 toSwap = rightChild;
-                swap(index, toSwap);
             }
-            if (trickleDownSwapper(index, leftChild)) {
-                toSwap = leftChild;
+            if (trickleDownSwapper(index, toSwap)) {
                 swap(index, toSwap);
             }
             trickleDown(toSwap);

@@ -1,6 +1,7 @@
 /**
  * This class builds the Priority Queue ADT
  */
+
 public class MyPriorityQueue<T extends Comparable<? super T>> {
 
     private BinaryHeap<T> pQueue;
